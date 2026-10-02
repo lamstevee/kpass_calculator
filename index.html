@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>모두의 카드 실부담 계산기</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <main class="page">
+    <header class="masthead"><span>모두의 카드 계산기</span><span>2026년 기준 · 예상 금액</span></header>
+    <section class="intro">
+      <div><p class="eyebrow">K-패스 + 하나 나라사랑카드</p><h1>교통비를 바꾸면<br><em>실부담액</em>이 보입니다.</h1></div>
+      <p>기본형·일반형·플러스형 중 가장 큰 K-패스 환급과 하나카드 교통 캐시백을 함께 계산합니다. 삼성월렛 티머니로 받는 K-패스 환급은 T마일리지로 표시합니다.</p>
+    </section>
+
+    <div class="layout">
+      <section class="panel controls" aria-labelledby="input-title">
+        <div class="section-head"><span class="section-number">01</span><h2 id="input-title">이용 조건</h2></div>
+        <div class="field two-col">
+          <label>이용월<select id="month"><option value="normal">2026년 10~12월</option><option value="temporary">2026년 4~9월</option><option value="early">2026년 1~3월</option></select></label>
+          <label>주민등록상 거주 지역<select id="region"><option value="local">일반 지방권</option><option value="metro">수도권 · 서울</option><option value="gyeonggi">수도권 · 경기·인천</option><option value="priority">우대지원지역</option><option value="special">특별지원지역</option></select></label>
+        </div>
+        <div class="field"><label>이용자 유형<select id="type"><option value="general">일반</option><option value="youth">청년·2자녀·65세 이상</option><option value="three">3자녀 이상</option><option value="low">저소득층</option></select></label></div>
+        <label id="regionalExceptionField" class="check wide"><input id="regionalException" type="checkbox"><span><strong>경남·울산 거주</strong><small>기본형의 월 20만 원 초과분 50% 감액 예외</small></span></label>
+        <div class="field amount-field">
+          <div class="field-heading"><label for="amount">월 대중교통 이용금액</label><div class="money-entry"><input id="amountNumber" type="number" min="0" max="300000" step="1000" value="80000" aria-label="월 대중교통 이용금액 직접 입력"><span>원</span></div></div>
+          <input id="amount" type="range" min="0" max="300000" step="1000" value="80000">
+          <div class="scale"><span>0원</span><span>15만 원</span><span>30만 원</span></div>
+        </div>
+        <div class="field amount-field">
+          <div class="field-heading"><label for="ordinary">그중 일반형 적용 금액</label><div class="money-entry"><input id="ordinaryNumber" type="number" min="0" max="300000" step="1000" value="80000" aria-label="일반형 적용 금액 직접 입력"><span>원</span></div></div>
+          <input id="ordinary" type="range" min="0" max="80000" step="1000" value="80000">
+          <p class="help">기본값은 월 이용금액과 같습니다. 직접 줄이면 별도로 유지됩니다. 환승 포함 1회 총 이용금액이 3,000원 미만인 이용분입니다.</p>
+        </div>
+        <div class="field amount-field">
+          <div class="field-heading"><label for="cardEligible">그중 하나카드 캐시백 대상</label><div class="money-entry"><input id="cardEligibleNumber" type="number" min="0" max="300000" step="1000" value="80000" aria-label="하나카드 버스 지하철 이용금액 직접 입력"><span>원</span></div></div>
+          <input id="cardEligible" type="range" min="0" max="80000" step="1000" value="80000">
+          <p class="help">기본값은 월 이용금액과 같습니다. 직접 줄이면 별도로 유지됩니다. 하나카드로 결제한 버스·지하철 금액만 입력합니다.</p>
+        </div>
+        <div class="field amount-field" id="offpeakField" hidden>
+          <div class="field-heading"><label for="offpeak">그중 시차시간 승차 금액</label><div class="money-entry"><input id="offpeakNumber" type="number" min="0" max="300000" step="1000" value="0" aria-label="시차시간 승차 금액 직접 입력"><span>원</span></div></div>
+          <input id="offpeak" type="range" min="0" max="80000" step="1000" value="0">
+          <p class="help">2026년 4~12월 지정 시차시간 승차분은 기본형 환급률이 30%p 높아집니다. 승차시간: 05:30~06:30, 09:00~10:00, 16:00~17:00, 19:00~20:00.</p>
+        </div>
+        <div class="field two-col compact">
+          <label>월 이용횟수<input id="rides" type="number" min="0" max="999" value="42" inputmode="numeric"><small>정액형은 60회가 넘어도 계산됩니다.</small></label>
+          <label class="check"><input id="firstMonth" type="checkbox"><span>가입 첫 달</span></label>
+        </div>
+        <div class="rule"></div>
+        <label class="check wide"><input id="card" type="checkbox" checked><span><strong>하나 나라사랑카드 캐시백 반영</strong><small>전월 실적 충족 · 버스·지하철 20%, 월 최대 1만 원으로 가정</small></span></label>
+        <label class="check wide"><input id="tmoney" type="checkbox" checked><span><strong>삼성월렛 티머니 K-패스 등록</strong><small>등록된 경우에만 K-패스 환급을 T마일리지로 계산</small></span></label>
+        <p class="note">하나카드의 실제 통합 할인한도는 전월 실적 구간에 따라 달라집니다. 이 계산기는 요청하신 대로 교통 캐시백 한도 1만 원을 가정합니다.</p>
+      </section>
+
+      <section class="panel results" aria-labelledby="result-title">
+        <div class="section-head"><span class="section-number">02</span><h2 id="result-title">예상 결과</h2></div>
+        <div class="hero-result"><div><span class="caption">혜택 반영 실부담액</span><strong id="net">45,000원</strong></div><span id="winner" class="badge">일반형 적용</span></div>
+        <div class="summary-grid"><div><span>월 교통비</span><strong id="fare">80,000원</strong></div><div><span id="refundLabel">K-패스 환급 · T마일리지</span><strong id="refund">25,000P</strong></div><div><span>하나카드 캐시백</span><strong id="cashback">10,000원</strong></div></div>
+        <p id="settlement" class="settlement">교통비는 먼저 결제되고, 캐시백과 마일리지는 별도로 지급됩니다.</p>
+        <div class="chart-head"><h3>교통비에 따른 실부담액</h3><span>현재 입력 <b id="currentAmount">80,000원</b></span></div>
+        <div class="chart-wrap"><svg id="chart" role="img" aria-label="월 교통비에 따른 실부담액 비교 그래프" viewBox="0 0 600 260" preserveAspectRatio="none"></svg></div>
+        <div class="legend"><span><i class="dot no-benefit"></i>혜택 없음</span><span><i class="dot kpass"></i>K-패스만</span><span><i class="dot combined"></i>K-패스 + 하나카드</span></div>
+        <div class="comparison"><h3>K-패스 방식별 환급</h3><div><span>기본형 · 정률 환급</span><strong id="basic">16,000원</strong></div><div><span>모두의 카드 · 일반형</span><strong id="general">25,000원</strong></div><div><span>모두의 카드 · 플러스형</span><strong id="plus">0원</strong></div></div>
+        <p id="warning" class="warning" hidden></p>
+      </section>
+    </div>
+    <footer><p>예상 계산입니다. 기본형은 하루 2회·월 60회까지 인정되므로 이용내역 없이 정확한 상위 이용분을 산정할 수 없습니다. 카드사 매출 접수, 환승 묶음, 지역별 추가혜택 및 실제 지급 기준에 따라 결과가 달라질 수 있습니다. T마일리지는 현금 입금액이 아닌 사용 가능한 포인트로 계산했습니다.</p><div><a href="https://www.molit.go.kr/mtc/USR/WPGE0201/m_37187/DTL.jsp" target="_blank" rel="noopener noreferrer">모두의 카드 기준</a><a href="https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp/dtl.jsp?id=95092459&lcmspage=1" target="_blank" rel="noopener noreferrer">시차시간 혜택 연장</a><a href="https://korea-pass.kr/info/intro.do" target="_blank" rel="noopener noreferrer">K-패스 지급 기준</a><a href="https://m.hanacard.co.kr/leaflet/15/15475_20251215.pdf" target="_blank" rel="noopener noreferrer">하나카드 상품설명서</a><a href="https://tmoney.co.kr/aeb/cmnctn/news/readNewsView.dev?bdSeqNo=4170" target="_blank" rel="noopener noreferrer">티머니 등록 안내</a></div></footer>
+  </main>
+</body>
+</html>
